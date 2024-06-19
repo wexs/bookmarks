@@ -36,7 +36,7 @@ h1 {
     font-size: 16px;
 }
 .newbt:hover {
-    background-color:rgba(0, 128, 0, 0.7);
+    background-color:rgba(38, 191, 38, 0.7);
 }
 .newbt:active {
     background-color: green;
@@ -56,4 +56,11 @@ select {
 
 .right {
     float: right;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+      background-color: #303030;
+  }
+
 }
