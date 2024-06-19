@@ -1,6 +1,24 @@
 
+body {
+    min-width: 200px;
+    min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  button {
+    padding: 10px 20px;
+    font-size: 16px;
+    margin-top: 12px;
 
-p {
+  }
+  select {
+    padding: 5px;
+    font-size: 16px;
+  }
+
+  p {
     color: #cfcfcf;
 }
 h1 {
