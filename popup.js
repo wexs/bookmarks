@@ -40,22 +40,39 @@ function convertToHtml(nodes) {
   <meta charset="utf-8">
   <title>书签</title>
   <style>
-    body { font-family: Arial, sans-serif; }
+    body { font-family: Arial, sans-serif; padding: 20px; background-color: #f5f5f5; }
     ul { list-style-type: none; padding: 0; }
     li { margin: 10px 0; }
-    a { 
-      display: block; 
+    .link { 
+      background: #fff; 
+      padding: 20px; 
+      border-radius: 12px;
+    }
+    .folder { 
+      background: #e1f5fe; 
+      border-radius: 4px; 
       padding: 10px; 
+    }
+    .folder a{ 
+      font-size: 24px;
+      text-decoration: none;
+      color: tomato;
+    }
+    .link a { 
       text-decoration: none; 
       color: #000; 
-      background: #f9f9f9; 
-      border: 1px solid #ddd; 
-      border-radius: 4px; 
-      box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1); 
-      transition: background 0.3s ease; 
+      display: flex; 
+      align-items: center; 
+      font-size: 16px;
     }
-    a:hover { background: #f1f1f1; }
-    .folder > a { font-weight: bold; }
+    .link a img, .folder a img { 
+      width: 16px; 
+      height: 16px; 
+      margin-right: 10px; 
+    }
+    .link:hover:hover { 
+      background: hsla(0, 0%, 100%, 0.5); 
+    }
   </style>
 </head>
 <body>
@@ -68,7 +85,9 @@ function convertToHtml(nodes) {
         traverse(node.children);
         html += '</ul></li>';
       } else {
-        html += `<li><a href="${node.url}">${node.title}</a></li>`;
+        const faviconUrl = node.url ? `https://www.google.com/s2/favicons?domain=${new URL(node.url).hostname}` : '';
+        const displayTitle = node.title || node.url;
+        html += `<li class="link"><a href="${node.url}"><img src="${faviconUrl}" alt="Icon">${displayTitle}</a></li>`;
       }
     });
   }
