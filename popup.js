@@ -10,6 +10,15 @@ document.getElementById('export').addEventListener('click', () => {
   });
 });
 
+document.getElementById('openInNewTab').addEventListener('click', () => {
+  chrome.bookmarks.getTree((bookmarkTreeNodes) => {
+    const bookmarkHtml = convertToHtml(bookmarkTreeNodes);
+    const blob = new Blob([bookmarkHtml], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    chrome.tabs.create({ url });
+  });
+});
+
 function exportToJson(bookmarkTreeNodes) {
   const bookmarkJson = JSON.stringify(bookmarkTreeNodes, null, 2);
   const blob = new Blob([bookmarkJson], { type: 'application/json' });

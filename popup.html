@@ -2,6 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
+  <link rel="stylesheet" href="style.css">
   <title>书签导出工具</title>
   <style>
     body {
@@ -15,32 +16,29 @@
     button {
       padding: 10px 20px;
       font-size: 16px;
-      margin-top: 10px;
-      width: 152px;
+      margin-top: 12px;
+
     }
     select {
-      padding: 6px;
+      padding: 5px;
       font-size: 16px;
-      width: 152px;
-    }
-    p {
-      color: rgba(0, 0, 0, 0.2);
-    }
-    h1 {
-      font-size: 80px;
-      margin: 0px;
-      margin-top: 12px;
-      margin-bottom: 12px;
     }
   </style>
 </head>
 <body>
   <h1>🔖</h1>
-  <select id="fileType">
-    <option value="html">HTML</option>
-    <option value="json">JSON</option>
-  </select>
-  <button id="export">导出书签</button>
+  <button class="newbt" id="openInNewTab">在新标签页中打开</button>
+  <div class="parent">
+    <div class="left">
+      <select id="fileType">
+        <option value="html">HTML</option>
+        <option value="json">JSON</option>
+      </select>
+    </div>
+    <div class="right">
+      <button id="export">导出</button>
+    </div>
+  </div>
   <p>©Maple design</p>
   <script src="popup.js"></script>
 </body>

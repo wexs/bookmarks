@@ -3,7 +3,7 @@
   "name": "书签导出工具",
   "version": "1.1",
   "description": "将Chrome书签导出为JSON或HTML文件",
-  "permissions": ["bookmarks"],
+  "permissions": ["bookmarks", "tabs"],
   "action": {
     "default_popup": "popup.html"
   },

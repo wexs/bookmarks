@@ -1,0 +1,41 @@
+
+
+p {
+    color: #00000033;
+}
+h1 {
+    font-size: 80px;
+    margin: 0px;
+    margin-top: 12px;
+    margin-bottom: 12px;
+}
+.newbt {
+    border-width: 0px;
+    background:rgb(86, 205, 50);
+    border-radius: 4px;
+    color: white;
+    height: 48px;
+    font-size: 16px;
+}
+.newbt:hover {
+    background-color:rgba(0, 128, 0, 0.7);
+}
+.newbt:active {
+    background-color: green;
+}
+select {
+    margin-top: 12px;
+    height: 46px;
+}
+.parent {
+    width: 166px;
+    overflow: hidden;
+  }
+
+.left {
+    float: left;
+  }
+
+.right {
+    float: right;
+}
