@@ -66,8 +66,8 @@ function convertToHtml(nodes) {
       font-size: 16px;
     }
     .link a img, .folder a img { 
-      width: 16px; 
-      height: 16px; 
+      width: 32px; 
+      height: 32px; 
       margin-right: 10px; 
     }
     .link:hover:hover { 
@@ -85,7 +85,7 @@ function convertToHtml(nodes) {
         traverse(node.children);
         html += '</ul></li>';
       } else {
-        const faviconUrl = node.url ? `https://www.google.com/s2/favicons?domain=${new URL(node.url).hostname}` : '';
+        const faviconUrl = node.url ? `https://www.google.com/s2/favicons?sz=64&domain_url=${new URL(node.url).hostname}` : '';
         const displayTitle = node.title || node.url;
         html += `<li class="link"><a href="${node.url}"><img src="${faviconUrl}" alt="Icon">${displayTitle}</a></li>`;
       }
