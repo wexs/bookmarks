@@ -5,11 +5,11 @@
   "description": "将Chrome书签导出为JSON或HTML文件",
   "permissions": ["bookmarks"],
   "action": {
-    "default_popup": "popup.html",
-    "default_icon": {
+    "default_popup": "popup.html"
+  },
+  "default_icon": {
       "16": "icon.png",
       "48": "icon.png",
       "128": "icon.png"
     }
-  }
 }
