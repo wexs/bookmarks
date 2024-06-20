@@ -7,12 +7,6 @@ body {
     justify-content: center;
     align-items: center;
   }
-  button {
-    padding: 10px 20px;
-    font-size: 16px;
-    margin-top: 12px;
-
-  }
   select {
     padding: 5px;
     font-size: 16px;
@@ -34,12 +28,31 @@ h1 {
     color: white;
     height: 48px;
     font-size: 16px;
+    width: 168px;
+    border-radius: 8px;
+
 }
 .newbt:hover {
-    background-color:rgba(38, 191, 38, 0.7);
+    background-color:rgba(50, 177, 50);
 }
 .newbt:active {
     background-color: green;
+}
+.newbt_small {
+  border-width: 0px;
+  background:#f0f0f0;
+  border-radius: 4px;
+  color: (#000000, 231, 231);
+  height: 32px;
+  font-size: 12px;
+  width: 82px;
+  border-radius: 8px;
+}
+.newbt_small:hover {
+  background-color:#e4e4e4;
+}
+.newbt_small:active {
+  background-color: #cbcbcb;
 }
 select {
     margin-top: 12px;
@@ -57,10 +70,24 @@ select {
 .right {
     float: right;
 }
+.btcard {
+  margin-top: 16px;
+}
 
 @media (prefers-color-scheme: dark) {
   body {
       background-color: #303030;
   }
+  .newbt_small {
+    background:rgba(240, 240, 240, 0.2);
+    color: #ffffff;
+  }
+  .newbt_small:hover {
+    background-color:rgba(240, 240, 240, 0.1);
+  }
+  .newbt_small:active {
+    background-color: rgba(240, 240, 240, 0.05);
+  }
 
 }
+
