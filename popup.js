@@ -44,12 +44,18 @@ function exportToHtml(bookmarkTreeNodes) {
 }
 
 function convertToHtml(nodes) {
+  const categories = {
+    "新闻": ["nytimes.com", "cnn.com"],
+    "社交": ["facebook.com", "twitter.com"],
+    "购物": ["amazon.com", "ebay.com"],
+    "其他": []
+  };
+
   let html = `
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
-  <link rel="stylesheet" href="style.css">
   <title>书签</title>
   <style>
     body { 
@@ -99,33 +105,30 @@ function convertToHtml(nodes) {
 <body>
   <ul>`;
 
-  nodes.forEach((node) => {
-    if (node.children && node.children.length > 0) {
-      html += `<li class="folder"><a href="#">${node.title}</a><ul>`;
-      node.children.forEach((childNode) => {
-        if (childNode.children && childNode.children.length > 0) {
-          html += `<li class="folder"><a href="#">${childNode.title}</a><ul>`;
-          childNode.children.forEach((grandChildNode) => {
-            extractBookmarks(grandChildNode);
-          });
-          html += '</ul></li>';
-        } else {
-          extractBookmarks(childNode);
-        }
-      });
-      html += '</ul></li>';
-    }
-  });
+  for (const category in categories) {
+    html += `<li class="folder"><a href="#">${category}</a><ul>`;
+    nodes.forEach((node) => {
+      if (node.children && node.children.length > 0) {
+        node.children.forEach((childNode) => {
+          categorizeBookmarks(childNode, category);
+        });
+      }
+    });
+    html += '</ul></li>';
+  }
 
-  function extractBookmarks(node) {
+  function categorizeBookmarks(node, category) {
     if (node.children && node.children.length > 0) {
       node.children.forEach((childNode) => {
-        extractBookmarks(childNode);
+        categorizeBookmarks(childNode, category);
       });
     } else if (node.url) {
-      const faviconUrl = node.url ? `https://www.google.com/s2/favicons?sz=64&domain_url=${new URL(node.url).hostname}` : '';
-      const displayTitle = node.title || node.url;
-      html += `<li class="link"><a href="${node.url}"><img src="${faviconUrl}" alt="Icon">${displayTitle}</a></li>`;
+      const domain = new URL(node.url).hostname.replace('www.', '');
+      if (categories[category].includes(domain) || category === "其他") {
+        const faviconUrl = node.url ? `https://www.google.com/s2/favicons?sz=64&domain_url=${domain}` : '';
+        const displayTitle = node.title || node.url;
+        html += `<li class="link"><a href="${node.url}"><img src="${faviconUrl}" alt="Icon">${displayTitle}</a></li>`;
+      }
     }
   }
 
