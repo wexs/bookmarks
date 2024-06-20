@@ -46,8 +46,8 @@ function exportToHtml(bookmarkTreeNodes) {
 function convertToHtml(nodes) {
   const categories = {
     "新闻": ["nytimes.com", "cnn.com"],
-    "社交": ["facebook.com", "twitter.com"],
-    "购物": ["amazon.com", "ebay.com"],
+    "社交": ["facebook.com", "x.com","instagram.com"],
+    "设计": ["dribbble.com", "behance.com"],
     "其他": []
   };
 
