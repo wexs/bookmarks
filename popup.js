@@ -110,6 +110,9 @@ function convertToHtml(nodes) {
       box-sizing: border-box;
       overflow-y: auto;
     }
+    .content h2 {
+      font-size:32px;
+    }
     .content ul {
       list-style-type: none;
       padding: 0;
