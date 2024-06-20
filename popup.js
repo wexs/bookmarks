@@ -44,14 +44,6 @@ function exportToHtml(bookmarkTreeNodes) {
 }
 
 function convertToHtml(nodes) {
-  const categories = {
-    "新闻": ["Google.com","toutiao.com"],
-    "社交": ["bilibili.com","weibo.com"],
-    "购物": ["taobao.com", "jd.com"],
-    "设计": ["behance.com", "dribble.com"],
-    "其他": []
-  };
-
   let html = `
 <!DOCTYPE html>
 <html>
@@ -71,7 +63,7 @@ function convertToHtml(nodes) {
     .sidebar {
       min-width: 200px;
       background-image: linear-gradient(-45deg, #E0EA5E 0%, #30D158 100%);
-      color: #ecf0f1;
+      color: #000;
       padding: 20px;
       box-sizing: border-box;
       height: 100%;
@@ -93,25 +85,23 @@ function convertToHtml(nodes) {
       font-weight: bold;
     }
     .sidebar ul li a {
-      color: #ecf0f1;
+      color: rgba(0,0,0,0.5);
       text-decoration: none;
       display: block;
-      padding: 10px;
-      border-radius: 4px;
+      padding: 12px;
+      border-radius: 8px;
       transition: all 0.3s;
 
     }
     .sidebar ul li a:hover {
-      background: rgba(40,120,59,0.3);
+      background: rgba(250,250,250,0.5);
     }
     .content {
       flex-grow: 1;
-      padding: 20px;
+      padding-right: 24px;
+      padding-left: 24px;
       box-sizing: border-box;
       overflow-y: auto;
-    }
-    .content h2 {
-      font-size:32px;
     }
     .content ul {
       list-style-type: none;
@@ -142,6 +132,16 @@ function convertToHtml(nodes) {
     }
     .content li:hover {
       background: rgba(48,209,88,0.2);
+    }
+    .bookmark-title {
+      margin-bottom: 12px;
+      clear: both;
+      font-size:32px;
+      padding-top:32px;
+      margin-top: 0px;
+    }
+    folder-0 {
+      user-select: none;
     }
     .info p {
       position: fixed;  
@@ -184,7 +184,7 @@ function convertToHtml(nodes) {
       .content li {
         background: rgba(250,250,250,0.05);
       }
-    }   
+    }
   </style>
 </head>
 <body>
@@ -201,51 +201,44 @@ function convertToHtml(nodes) {
     </div>
     <h2>BookMarks</h2>
     <ul>`;
-  
-  for (const category in categories) {
-    html += `<li><a href="#${category}">${category}</a></li>`;
+
+  function generateSidebar(nodes) {
+    nodes.forEach((node) => {
+      if (node.children && node.children.length > 0) {
+        html += `<li><a href="#folder-${node.id}">${node.title}</a></li>`;
+        generateSidebar(node.children);
+      }
+    });
   }
+
+  generateSidebar(nodes);
 
   html += `</ul></div><div class="content">`;
 
-  for (const category in categories) {
-    html += `<h2 id="${category}">${category}</h2><ul>`;
+  function generateBookmarkList(nodes) {
     nodes.forEach((node) => {
       if (node.children && node.children.length > 0) {
+        html += `<h2 id="folder-${node.id}" class="bookmark-title">${node.title}</h2><ul>`;
         node.children.forEach((childNode) => {
-          if (childNode.children && childNode.children.length > 0) {
-            childNode.children.forEach((grandChildNode) => {
-              categorizeBookmarks(grandChildNode, category);
-            });
-          } else {
-            categorizeBookmarks(childNode, category);
-          }
+          generateBookmarkList([childNode]);
         });
-      }
-    });
-    html += '</ul>';
-  }
-
-  function categorizeBookmarks(node, category) {
-    if (node.children && node.children.length > 0) {
-      node.children.forEach((childNode) => {
-        categorizeBookmarks(childNode, category);
-      });
-    } else if (node.url) {
-      const domain = new URL(node.url).hostname.replace('www.', '');
-      if (categories[category].includes(domain) || category === "其他") {
+        html += '</ul>';
+      } else if (node.url) {
+        const domain = new URL(node.url).hostname.replace('www.', '');
         const faviconUrl = node.url ? `https://www.google.com/s2/favicons?sz=64&domain_url=${domain}` : '';
         const displayTitle = node.title || node.url;
         html += `<li class="link"><a href="${node.url}"><img src="${faviconUrl}" alt="Icon">${displayTitle}</a></li>`;
       }
-    }
+    });
   }
+
+  generateBookmarkList(nodes);
 
   html += `
   </div>
 </body>
 </html>`;
-  
+
   return html;
 }
 
