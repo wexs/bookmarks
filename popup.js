@@ -45,9 +45,10 @@ function exportToHtml(bookmarkTreeNodes) {
 
 function convertToHtml(nodes) {
   const categories = {
-    "新闻": ["nytimes.com", "cnn.com"],
-    "社交": ["facebook.com", "x.com","instagram.com"],
-    "设计": ["dribbble.com", "behance.com"],
+    "新闻": ["Google.com","toutiao.com"],
+    "社交": ["bilibili.com","weibo.com"],
+    "购物": ["taobao.com", "jd.com"],
+    "设计": ["behance.com", "dribble.com"],
     "其他": []
   };
 
@@ -58,63 +59,168 @@ function convertToHtml(nodes) {
   <meta charset="utf-8">
   <title>书签</title>
   <style>
-    body { 
-      font-family: Arial, sans-serif; 
-      padding: 20px; 
-      background-color: #e1f5fe;
+    body {
+      display: flex;
+      font-family: Arial, sans-serif;
+      background-color: #fff;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      box-sizing: border-box;
     }
-    ul { list-style-type: none; padding: 0; }
-    li { margin: 10px 0; }
-    .link { 
-      background: #fff; 
-      padding: 20px; 
-      border-radius: 12px;
-      float: left;
-      margin-right: 20px;
+    .sidebar {
+      min-width: 200px;
+      background-image: linear-gradient(-45deg, #E0EA5E 0%, #30D158 100%);
+      color: #ecf0f1;
+      padding: 20px;
+      box-sizing: border-box;
+      height: 100%;
+      overflow-y: auto;
     }
-    .folder { 
-      border-radius: 4px; 
-      padding: 10px; 
-      float: left;
-    }
-
-    .folder a{ 
+    .sidebar h2 {
+      text-align: center;
+      margin: 0 0 20px;
       font-size: 24px;
-      text-decoration: none;
-      color: tomato;
+    }
+    .sidebar ul {
+      list-style-type: none;
+      padding: 0;
+      margin-top: 40px;
+      font-size: 16px;
+    }
+    .sidebar ul li {
+      margin: 10px 0;
       font-weight: bold;
     }
-    .link a { 
-      text-decoration: none; 
-      color: #000; 
-      display: flex; 
-      align-items: center; 
+    .sidebar ul li a {
+      color: #ecf0f1;
+      text-decoration: none;
+      display: block;
+      padding: 10px;
+      border-radius: 4px;
+      transition: all 0.3s;
+
+    }
+    .sidebar ul li a:hover {
+      background: rgba(40,120,59,0.3);
+    }
+    .content {
+      flex-grow: 1;
+      padding: 20px;
+      box-sizing: border-box;
+      overflow-y: auto;
+    }
+    .content ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
       font-size: 16px;
-      font-weight: normal;
     }
-    .link a img, .folder a img { 
-      width: 32px; 
-      height: 32px; 
-      margin-right: 10px; 
+    .content li {
+      margin: 10px 0;
+      background: rgba(48,209,88,0.1);
+      border-radius: 4px;
+      padding: 16px;
+      box-sizing: border-box;
+      float: left;
+      margin-right: 20px;
+      border-radius: 12px;
     }
-    .link:hover:hover { 
-      background: hsla(0, 0%, 100%, 0.5); 
+    .content li a {
+      text-decoration: none;
+      color: #000;
+      display: flex;
+      align-items: center;
     }
+    .content li a img {
+      width: 32px;
+      height: 32px;
+      margin-right: 10px;
+    }
+    .content li:hover {
+      background: rgba(48,209,88,0.2);
+    }
+    .info p {
+      position: fixed;  
+      bottom: 12px;
+      color: rgba(0,0,0,0.50);
+      font-size: 14px;
+    }
+    .coffe p{
+      position: fixed;  
+      bottom: 8px;
+      font-size: 40px;
+    }
+    .share {
+      background-image: linear-gradient(-45deg, #E0EA5E 0%, #30D158 100%);
+      width: 64px;
+      height: 64px;
+      border-radius: 32px;
+      position: fixed;  
+      top: 40px;
+      right: 40px;
+      
+    }
+    .share p {
+      font-size: 24px;
+      transition: all 0.3s;
+      text-align: center;
+      margin-top: 17px;
+    }
+    .share:hover p{
+      transform: rotateZ(180deg) scale(1.2);
+    }
+    @media (prefers-color-scheme: dark) {
+      body {
+        background-image: linear-gradient(45deg, #0A2A12 0%, #2D2F13 100%);
+        color:#fff;
+      }
+      .content li a {
+        color: #fff;
+      }
+      .content li {
+        background: rgba(250,250,250,0.05);
+      }
+    }   
   </style>
 </head>
 <body>
-  <ul>`;
+  <div class="sidebar">
+    <h1 style="font-size: 60px;text-align: center; margin:4px;">🔖</h1>
+    <div class="coffe">
+      <p>☕</p>
+    </div>
+    <div class="share">
+      <p>🔗</p>
+    </div>
+    <div class="info">
+      <p>© Maple design</p>
+    </div>
+    <h2>BookMarks</h2>
+    <ul>`;
+  
+  for (const category in categories) {
+    html += `<li><a href="#${category}">${category}</a></li>`;
+  }
+
+  html += `</ul></div><div class="content">`;
 
   for (const category in categories) {
-    html += `<li class="folder"><a href="#">${category}</a><ul>`;
+    html += `<h2 id="${category}">${category}</h2><ul>`;
     nodes.forEach((node) => {
       if (node.children && node.children.length > 0) {
         node.children.forEach((childNode) => {
-          categorizeBookmarks(childNode, category);
+          if (childNode.children && childNode.children.length > 0) {
+            childNode.children.forEach((grandChildNode) => {
+              categorizeBookmarks(grandChildNode, category);
+            });
+          } else {
+            categorizeBookmarks(childNode, category);
+          }
         });
       }
     });
-    html += '</ul></li>';
+    html += '</ul>';
   }
 
   function categorizeBookmarks(node, category) {
@@ -133,7 +239,7 @@ function convertToHtml(nodes) {
   }
 
   html += `
-  </ul>
+  </div>
 </body>
 </html>`;
   
