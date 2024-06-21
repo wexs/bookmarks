@@ -193,7 +193,7 @@ function convertToHtml(nodes) {
 </head>
 <body>
   <div class="sidebar">
-    <h1 style="font-size: 60px;text-align: center; margin:4px;">🔖</h1>
+    <h1 style="font-size: 80px;text-align: center; margin:4px;">🔖</h1>
     <div class="coffe">
       <p>☕</p>
     </div>

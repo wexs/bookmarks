@@ -73,6 +73,17 @@ select {
 .btcard {
   margin-top: 16px;
 }
+.logolink {
+  border-width: 0px;
+  background-color: rgba(127, 255, 212, 0);
+  transition: all 0.3s;
+  margin-top: 12px;
+  
+}
+.logolink a {
+  font-size: 80px;
+  text-decoration: none;
+}
 
 @media (prefers-color-scheme: dark) {
   body {
