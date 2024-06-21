@@ -44,14 +44,9 @@ function exportToHtml(bookmarkTreeNodes) {
 }
 
 function convertToHtml(nodes) {
-  let html = `
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>书签</title>
+  const styles = `
   <style>
-    body {
+     body {
       display: flex;
       font-family: Arial, sans-serif;
       background-color: #fff;
@@ -162,16 +157,17 @@ function convertToHtml(nodes) {
       position: fixed;  
       top: 40px;
       right: 40px;
-      
-    }
-    .share p {
-      font-size: 24px;
       transition: all 0.3s;
-      text-align: center;
-      margin-top: 17px;
     }
-    .share:hover p{
-      transform: rotateZ(180deg) scale(1.2);
+    .share a {
+      font-size: 32px;
+      text-align: center;
+      line-height:60px;
+      padding:16px;
+      text-decoration: none;
+    }
+    .share:hover { 
+      transform: rotateZ(30deg) scale(1.1);
     }
     @media (prefers-color-scheme: dark) {
       body {
@@ -185,7 +181,15 @@ function convertToHtml(nodes) {
         background: rgba(250,250,250,0.05);
       }
     }
-  </style>
+  </style>`;
+
+  let html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>书签</title>
+  ${styles}
 </head>
 <body>
   <div class="sidebar">
@@ -193,8 +197,8 @@ function convertToHtml(nodes) {
     <div class="coffe">
       <p>☕</p>
     </div>
-    <div class="share">
-      <p>🔗</p>
+    <div class="share" >
+      <a href="https://song.bss.design/">🚧</a>
     </div>
     <div class="info">
       <p>© Maple design</p>
@@ -206,7 +210,9 @@ function convertToHtml(nodes) {
     nodes.forEach((node) => {
       if (node.children && node.children.length > 0) {
         html += `<li><a href="#folder-${node.id}">${node.title}</a></li>`;
-        generateSidebar(node.children);
+        node.children.forEach((child) => {
+          generateSidebar([child]); // Recursively add child folders to sidebar
+        });
       }
     });
   }
@@ -219,15 +225,15 @@ function convertToHtml(nodes) {
     nodes.forEach((node) => {
       if (node.children && node.children.length > 0) {
         html += `<h2 id="folder-${node.id}" class="bookmark-title">${node.title}</h2><ul>`;
-        node.children.forEach((childNode) => {
-          generateBookmarkList([childNode]);
+        node.children.forEach((child) => {
+          generateBookmarkList([child]); // Recursively add child bookmarks
         });
         html += '</ul>';
       } else if (node.url) {
         const domain = new URL(node.url).hostname.replace('www.', '');
-        const faviconUrl = node.url ? `https://www.google.com/s2/favicons?sz=64&domain_url=${domain}` : '';
+        const faviconUrl = node.url ? `https://www.google.com/s2/favicons?sz=64&domain_url=${domain}` : 'default-icon.png';
         const displayTitle = node.title || node.url;
-        html += `<li class="link"><a href="${node.url}"><img src="${faviconUrl}" alt="Icon">${displayTitle}</a></li>`;
+        html += `<li class="link"><a href="${node.url}"><img src="${faviconUrl}" onerror="this.onerror=null;this.src='default-icon.png';" alt="Icon">${displayTitle}</a></li>`;
       }
     });
   }
