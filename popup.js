@@ -46,7 +46,7 @@ function exportToHtml(bookmarkTreeNodes) {
 function convertToHtml(nodes) {
   const styles = `
   <style>
-     body {
+    body {
       display: flex;
       font-family: Arial, sans-serif;
       background-color: #fff;
@@ -203,7 +203,7 @@ function convertToHtml(nodes) {
     <div class="info">
       <p>© Maple design</p>
     </div>
-    <h2>BookMarks</h2>
+    <h2>书签文件夹</h2>
     <ul>`;
 
   function generateSidebar(nodes) {
@@ -221,19 +221,21 @@ function convertToHtml(nodes) {
 
   html += `</ul></div><div class="content">`;
 
-  function generateBookmarkList(nodes) {
+  function generateBookmarkList(nodes, indent = 0) {
     nodes.forEach((node) => {
       if (node.children && node.children.length > 0) {
-        html += `<h2 id="folder-${node.id}" class="bookmark-title">${node.title}</h2><ul>`;
+        html += `${' '.repeat(indent)}<h2 id="folder-${node.id}" class="bookmark-title">${node.title}</h2>\n${' '.repeat(indent)}<ul>\n`;
         node.children.forEach((child) => {
-          generateBookmarkList([child]); // Recursively add child bookmarks
+          generateBookmarkList([child], indent + 2); // Recursively add child bookmarks
         });
-        html += '</ul>';
+        html += `${' '.repeat(indent)}</ul>\n`;
       } else if (node.url) {
         const domain = new URL(node.url).hostname.replace('www.', '');
-        const faviconUrl = node.url ? `https://www.google.com/s2/favicons?sz=64&domain_url=${domain}` : 'default-icon.png';
+        const faviconUrl = `https://www.google.com/s2/favicons?sz=64&domain_url=${domain}`;
         const displayTitle = node.title || node.url;
-        html += `<li class="link"><a href="${node.url}"><img src="${faviconUrl}" onerror="this.onerror=null;this.src='default-icon.png';" alt="Icon">${displayTitle}</a></li>`;
+        const color = stringToColor(domain);
+        const initial = domain.charAt(0).toUpperCase();
+        html += `${' '.repeat(indent)}<li class="link"><a href="${node.url}"><img src="${faviconUrl}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"><div class="icon-placeholder" style="display: none; background-color:${color};">${initial}</div>${displayTitle}</a></li>\n`;
       }
     });
   }
@@ -246,6 +248,17 @@ function convertToHtml(nodes) {
 </html>`;
 
   return html;
+}
+
+function stringToColor(str) {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = str.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const color = (hash & 0x00FFFFFF)
+    .toString(16)
+    .toUpperCase();
+  return '#' + '00000'.substring(0, 6 - color.length) + color;
 }
 
 function formatHtml(html) {
