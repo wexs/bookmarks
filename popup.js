@@ -209,7 +209,7 @@ function convertToHtml(nodes) {
     <div class="info">
       <p>© Maple design</p>
     </div>
-    <h2>书签文件夹</h2>
+    <h2>Bookmarks</h2>
     <ul>`;
 
     function generateSidebar(nodes) {
