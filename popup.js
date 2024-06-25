@@ -106,12 +106,15 @@ function convertToHtml(nodes) {
       padding-left: 24px;
       box-sizing: border-box;
       overflow-y: auto;
+      
     }
     .content ul {
       list-style-type: none;
       padding: 0;
       margin: 0;
       font-size: 16px;
+      max-width:1200px;
+      margin: 0 auto;
     }
     .content li {
       margin: 10px 0;
