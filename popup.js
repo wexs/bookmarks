@@ -89,7 +89,7 @@ function convertToHtml(nodes) {
       font-weight: bold;
     }
     .sidebar ul li a {
-      color: rgba(0,0,0,0.5);
+      color: rgb(0, 97, 21);
       text-decoration: none;
       display: block;
       padding: 12px;
