@@ -44,6 +44,7 @@ function exportToHtml(bookmarkTreeNodes) {
 }
 
 function convertToHtml(nodes) {
+  const totalBookmarks = countBookmarks(nodes);
   const styles = `
   <style>
     body {
@@ -75,6 +76,12 @@ function convertToHtml(nodes) {
       text-align: center;
       margin: 0px;
       font-size: 24px;
+    }
+    .sidebar p {
+      text-align: center;
+      margin-top:4px;
+      font-size: 12px;
+      color:rgba(0,0,0,0.50);
     }
     .sidebar ul {
       list-style-type: none;
@@ -149,8 +156,10 @@ function convertToHtml(nodes) {
     }
     .info p {
       color: rgba(0,0,0,0.50);
-      font-size: 14px;
+      font-size: 12px;
       margin: 0px;
+      margin-top:4px;
+      text-align:left;
     }
     .info {
       bottom: 0px;
@@ -170,7 +179,6 @@ function convertToHtml(nodes) {
     .coffe :hover{
       color:rgba(0,0,0,0.5);
     }
-  
     .share {
       background-image: linear-gradient(-45deg, #E0EA5E 0%, #30D158 100%);
       width: 64px;
@@ -227,70 +235,83 @@ function convertToHtml(nodes) {
       </div>
       <p>© Maple design</p>
     </div>
-    <h2>Bookmarks</h2>
+    <h2>BookMarks</h2>
+    <p>总计: ${totalBookmarks}</p>
     <ul>`;
 
-    function generateSidebar(nodes) {
-      nodes.forEach((node) => {
-        if (node.children && node.children.length > 0) {
-          html += `<li><a href="#folder-${node.id}">${node.title}</a></li>`;
-          node.children.forEach((child) => {
-            generateSidebar([child]); // Recursively add child folders to sidebar
-          });
-        }
-      });
-    }
-  
-    generateSidebar(nodes);
-  
-    html += `</ul></div><div class="content">`;
-  
-    function generateBookmarkList(nodes, indent = 0) {
-      nodes.forEach((node) => {
-        if (node.children && node.children.length > 0) {
-          html += `${' '.repeat(indent)}<h2 id="folder-${node.id}" class="bookmark-title">${node.title}</h2>\n${' '.repeat(indent)}<ul>\n`;
-          node.children.forEach((child) => {
-            generateBookmarkList([child], indent + 2); // Recursively add child bookmarks
-          });
-          html += `${' '.repeat(indent)}</ul>\n`;
-        } else if (node.url) {
-          const domain = new URL(node.url).hostname.replace('www.', '');
-          const faviconUrl = node.url ? `https://www.google.com/s2/favicons?sz=64&domain_url=${domain}` : 'default-icon.png';
-          const displayTitle = node.title || node.url;
-          html += `${' '.repeat(indent)}<li class="link"><a href="${node.url}"><img src="${faviconUrl}" onerror="this.onerror=null;this.src='default-icon.png';" alt="Icon">${displayTitle}</a></li>\n`;
-        }
-      });
-    }
-  
-    generateBookmarkList(nodes);
-  
-    html += `
-    </div>
-  </body>
-  </html>`;
-  
-    return html;
-  }
-  
-  function formatHtml(html) {
-    const formatted = html.replace(/(>)(<)(\/*)/g, '$1\r\n$2$3');
-    let pad = 0;
-    return formatted.split('\r\n').map((node, index) => {
-      let indent = 0;
-      if (node.match(/.+<\/\w[^>]*>$/)) {
-        indent = 0;
-      } else if (node.match(/^<\/\w/)) {
-        if (pad !== 0) {
-          pad -= 1;
-        }
-      } else if (node.match(/^<\w[^>]*[^\/]>.*$/)) {
-        indent = 1;
-      } else {
-        indent = 0;
+  function generateSidebar(nodes) {
+    nodes.forEach((node) => {
+      if (node.children && node.children.length > 0) {
+        html += `<li><a href="#folder-${node.id}">${node.title}</a></li>`;
+        node.children.forEach((child) => {
+          generateSidebar([child]); // Recursively add child folders to sidebar
+        });
       }
-  
-      const padding = '  '.repeat(pad);
-      pad += indent;
-      return padding + node;
-    }).join('\r\n');
+    });
   }
+
+  generateSidebar(nodes);
+
+  html += `</ul></div><div class="content">`;
+
+  function generateBookmarkList(nodes, indent = 0) {
+    nodes.forEach((node) => {
+      if (node.children && node.children.length > 0) {
+        html += `${' '.repeat(indent)}<h2 id="folder-${node.id}" class="bookmark-title">${node.title}</h2>\n${' '.repeat(indent)}<ul>\n`;
+        node.children.forEach((child) => {
+          generateBookmarkList([child], indent + 2); // Recursively add child bookmarks
+        });
+        html += `${' '.repeat(indent)}</ul>\n`;
+      } else if (node.url) {
+        const domain = new URL(node.url).hostname.replace('www.', '');
+        const faviconUrl = node.url ? `https://www.google.com/s2/favicons?sz=64&domain_url=${domain}` : 'default-icon.png';
+        const displayTitle = node.title || node.url;
+        html += `${' '.repeat(indent)}<li class="link"><a href="${node.url}"><img src="${faviconUrl}" onerror="this.onerror=null;this.src='default-icon.png';" alt="Icon">${displayTitle}</a></li>\n`;
+      }
+    });
+  }
+
+  generateBookmarkList(nodes);
+
+  html += `
+  </div>
+</body>
+</html>`;
+
+  return html;
+}
+
+function countBookmarks(nodes) {
+  let count = 0;
+  nodes.forEach((node) => {
+    if (node.url) {
+      count++;
+    } else if (node.children) {
+      count += countBookmarks(node.children);
+    }
+  });
+  return count;
+}
+
+function formatHtml(html) {
+  const formatted = html.replace(/(>)(<)(\/*)/g, '$1\r\n$2$3');
+  let pad = 0;
+  return formatted.split('\r\n').map((node, index) => {
+    let indent = 0;
+    if (node.match(/.+<\/\w[^>]*>$/)) {
+      indent = 0;
+    } else if (node.match(/^<\/\w/)) {
+      if (pad !== 0) {
+        pad -= 1;
+      }
+    } else if (node.match(/^<\w[^>]*[^\/]>.*$/)) {
+      indent = 1;
+    } else {
+      indent = 0;
+    }
+
+    const padding = '  '.repeat(pad);
+    pad += indent;
+    return padding + node;
+  }).join('\r\n');
+}
