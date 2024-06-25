@@ -60,7 +60,7 @@ function convertToHtml(nodes) {
       text-decoration: none;
     }
     .sidebar {
-      min-width: 200px;
+      width: 200px;
       background-image: linear-gradient(-45deg, #E0EA5E 0%, #30D158 100%);
       color: #000;
       padding: 0px;
