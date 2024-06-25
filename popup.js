@@ -56,6 +56,9 @@ function convertToHtml(nodes) {
       height: 100vh;
       box-sizing: border-box;
     }
+    a {
+      text-decoration: none;
+    }
     .sidebar {
       min-width: 200px;
       background-image: linear-gradient(-45deg, #E0EA5E 0%, #30D158 100%);
@@ -97,15 +100,14 @@ function convertToHtml(nodes) {
     }
     .sidebar ul li a {
       color: rgb(0, 97, 21);
-      text-decoration: none;
       display: block;
       padding: 12px;
       border-radius: 8px;
       transition: all 0.3s;
-
     }
     .sidebar ul li a:hover {
       background: rgba(250,250,250,0.5);
+      padding-left: 20px;
     }
     .content {
       flex-grow: 1;
@@ -134,7 +136,6 @@ function convertToHtml(nodes) {
       border-radius: 12px;
     }
     .content li a {
-      text-decoration: none;
       color: #000;
       display: flex;
       align-items: center;
@@ -187,17 +188,15 @@ function convertToHtml(nodes) {
       position: fixed;  
       top: 40px;
       right: 40px;
+    }
+    .share svg {
+      font-size: 30px;
+      padding:20px;
+      color:#000;
       transition: all 0.3s;
     }
-    .share a {
-      font-size: 32px;
-      text-align: center;
-      line-height:60px;
-      padding:16px;
-      text-decoration: none;
-    }
-    .share:hover { 
-      transform: rotateZ(30deg) scale(1.1);
+    .share svg:hover { 
+      transform: rotateZ(-90deg) scale(1.3);
     }
     @media (prefers-color-scheme: dark) {
       body {
@@ -223,9 +222,14 @@ function convertToHtml(nodes) {
 </head>
 <body>
   <div class="sidebar">
-    <h1>🔖</h1>
+    <a href="https://song.bss.design/">
+      <h1>🔖</h1>
+    </a>  
+  
     <div class="share" >
-      <a href="https://song.bss.design/">🚧</a>
+      <a href="https://song.bss.design/">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M18.3638 15.5355L16.9496 14.1213L18.3638 12.7071C20.3164 10.7545 20.3164 7.58866 18.3638 5.63604C16.4112 3.68341 13.2453 3.68341 11.2927 5.63604L9.87849 7.05025L8.46428 5.63604L9.87849 4.22182C12.6122 1.48815 17.0443 1.48815 19.778 4.22182C22.5117 6.95549 22.5117 11.3876 19.778 14.1213L18.3638 15.5355ZM15.5353 18.364L14.1211 19.7782C11.3875 22.5118 6.95531 22.5118 4.22164 19.7782C1.48797 17.0445 1.48797 12.6123 4.22164 9.87868L5.63585 8.46446L7.05007 9.87868L5.63585 11.2929C3.68323 13.2455 3.68323 16.4113 5.63585 18.364C7.58847 20.3166 10.7543 20.3166 12.7069 18.364L14.1211 16.9497L15.5353 18.364ZM14.8282 7.75736L16.2425 9.17157L9.17139 16.2426L7.75717 14.8284L14.8282 7.75736Z"></path></svg>
+      </a>
     </div>
     <div class="info">
       <div class="coffe">
@@ -236,7 +240,7 @@ function convertToHtml(nodes) {
       <p>© Maple design</p>
     </div>
     <h2>BookMarks</h2>
-    <p>总计: ${totalBookmarks}</p>
+    <p>—— Total: ${totalBookmarks} ——</p>
     <ul>`;
 
   function generateSidebar(nodes) {
