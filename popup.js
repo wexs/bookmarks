@@ -60,13 +60,14 @@ function convertToHtml(nodes) {
       text-decoration: none;
     }
     .sidebar {
-      width: 200px;
+      min-width: 200px;
+      max-width: 250px;
       background-image: linear-gradient(-45deg, #E0EA5E 0%, #30D158 100%);
       color: #000;
       padding: 0px;
       box-sizing: border-box;
       height: 100%;
-      overflow-y: auto;
+      overflow: auto;
       z-index: 2;
     }
     .sidebar h1 {
@@ -84,7 +85,7 @@ function convertToHtml(nodes) {
       text-align: center;
       margin-top:4px;
       font-size: 12px;
-      color:rgba(0,0,0,0.50);
+      color:rgba(0,0,0,0.35);
     }
     .sidebar ul {
       list-style-type: none;
@@ -115,21 +116,19 @@ function convertToHtml(nodes) {
       padding-left: 24px;
       box-sizing: border-box;
       overflow-y: auto;
-      
     }
     .content ul {
       list-style-type: none;
       padding: 0;
       margin: 0;
       font-size: 16px;
-      max-width:1200px;
+      max-width:calc(1000px + 20vw);
       margin: 0 auto;
     }
     .content li {
       margin: 10px 0;
       background: rgba(48,209,88,0.1);
       border-radius: 4px;
-      padding: 16px;
       box-sizing: border-box;
       float: left;
       margin-right: 20px;
@@ -139,6 +138,7 @@ function convertToHtml(nodes) {
       color: #000;
       display: flex;
       align-items: center;
+      padding: 20px;
     }
     .content li a img {
       width: 32px;
@@ -156,7 +156,6 @@ function convertToHtml(nodes) {
       margin-top: 0px;
     }
     .info p {
-      color: rgba(0,0,0,0.50);
       font-size: 12px;
       margin: 0px;
       margin-top:4px;
@@ -165,7 +164,6 @@ function convertToHtml(nodes) {
     .info {
       bottom: 0px;
       position: fixed;
-      background-color: #ffffff00;
       backdrop-filter: saturate(180%) blur(20px);
       -webkit-backdrop-filter: saturate(180%) blur(20px);;
       width: 160px;
