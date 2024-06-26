@@ -20,6 +20,11 @@ document.getElementById('openInNewTab').addEventListener('click', () => {
   });
 });
 
+document.getElementById('openIndex').addEventListener('click', () => {
+  const url = chrome.runtime.getURL('index.html');
+  chrome.tabs.create({ url });
+});
+
 function exportToJson(bookmarkTreeNodes) {
   const bookmarkJson = JSON.stringify(bookmarkTreeNodes, null, 2);
   const blob = new Blob([bookmarkJson], { type: 'application/json' });
@@ -266,10 +271,9 @@ function convertToHtml(nodes) {
         html += `${' '.repeat(indent)}</ul>\n`;
       } else if (node.url) {
         const domain = new URL(node.url).hostname.replace('www.', '');
-        const faviconUrl = node.url ? `https://www.google.com/s2/favicons?sz=64&domain_url=${domain}` : 'default-icon.png';
+        const faviconUrl = `https://www.google.com/s2/favicons?sz=64&domain_url=${domain}`;
         const displayTitle = node.title || node.url;
-        html += `${' '.repeat(indent)}<li class="link"><a href="${node.url}"><img src="${faviconUrl}" onerror="this.onerror=null;this.src='default-icon.png';" alt="Icon">${displayTitle}</a></li>\n`;
-      }
+        html += `${' '.repeat(indent)}<li class="link"><a href="${node.url}"><img src="${faviconUrl}" onerror="this.onerror=null;this.src='https://api.faviconkit.com/${domain}/64';" alt="Icon">${displayTitle}</a></li>\n`;      }
     });
   }
 
