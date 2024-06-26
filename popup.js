@@ -4,25 +4,13 @@ document.getElementById('exportJson').addEventListener('click', () => {
   });
 });
 
-document.getElementById('exportHtml').addEventListener('click', () => {
-  chrome.bookmarks.getTree((bookmarkTreeNodes) => {
-    exportToHtml(bookmarkTreeNodes);
-  });
-});
-
-document.getElementById('openInNewTab').addEventListener('click', () => {
+document.getElementById('openIndex').addEventListener('click', () => {
   chrome.bookmarks.getTree((bookmarkTreeNodes) => {
     const bookmarkHtml = convertToHtml(bookmarkTreeNodes);
-    const formattedHtml = formatHtml(bookmarkHtml);
-    const blob = new Blob([formattedHtml], { type: 'text/html' });
-    const url = URL.createObjectURL(blob);
+    localStorage.setItem('bookmarkHtml', bookmarkHtml);
+    const url = chrome.runtime.getURL('index.html');
     chrome.tabs.create({ url });
   });
-});
-
-document.getElementById('openIndex').addEventListener('click', () => {
-  const url = chrome.runtime.getURL('index.html');
-  chrome.tabs.create({ url });
 });
 
 function exportToJson(bookmarkTreeNodes) {
@@ -50,173 +38,9 @@ function exportToHtml(bookmarkTreeNodes) {
 
 function convertToHtml(nodes) {
   const totalBookmarks = countBookmarks(nodes);
-  const styles = `
-  <style>
-    body {
-      display: flex;
-      font-family: Arial, sans-serif;
-      background-color: #fff;
-      margin: 0;
-      padding: 0;
-      height: 100vh;
-      box-sizing: border-box;
-    }
-    a {
-      text-decoration: none;
-    }
-    .sidebar {
-      min-width: 200px;
-      max-width: 250px;
-      background-image: linear-gradient(-45deg, #E0EA5E 0%, #30D158 100%);
-      color: #000;
-      padding: 0px;
-      box-sizing: border-box;
-      height: 100%;
-      overflow: auto;
-      z-index: 2;
-    }
-    .sidebar h1 {
-      text-align: center;
-      margin-top: 24px;
-      margin-bottom: 0px;
-      font-size: 80px;
-    }
-    .sidebar h2 {
-      text-align: center;
-      margin: 0px;
-      font-size: 24px;
-    }
-    .sidebar p {
-      text-align: center;
-      margin-top:4px;
-      font-size: 12px;
-      color:rgba(0,0,0,0.35);
-    }
-    .sidebar ul {
-      list-style-type: none;
-      padding: 20px;
-      padding-top: 0px;
-      padding-bottom: 80px;
-      font-size: 16px;
-      margin-top: 0px;
-    }
-    .sidebar ul li {
-      margin: 10px 0;
-      font-weight: bold;
-    }
-    .sidebar ul li a {
-      color: rgb(0, 97, 21);
-      display: block;
-      padding: 12px;
-      border-radius: 8px;
-      transition: all 0.3s;
-    }
-    .sidebar ul li a:hover {
-      background: rgba(250,250,250,0.5);
-      padding-left: 20px;
-    }
-    .content {
-      flex-grow: 1;
-      padding-right: 24px;
-      padding-left: 24px;
-      box-sizing: border-box;
-      overflow-y: auto;
-    }
-    .content ul {
-      list-style-type: none;
-      padding: 0;
-      margin: 0;
-      font-size: 16px;
-      max-width:calc(1000px + 20vw);
-      margin: 0 auto;
-    }
-    .content li {
-      margin: 10px 0;
-      background: rgba(48,209,88,0.1);
-      border-radius: 4px;
-      box-sizing: border-box;
-      float: left;
-      margin-right: 20px;
-      border-radius: 12px;
-    }
-    .content li a {
-      color: #000;
-      display: flex;
-      align-items: center;
-      padding: 20px;
-    }
-    .content li a img {
-      width: 32px;
-      height: 32px;
-      margin-right: 10px;
-    }
-    .content li:hover {
-      background: rgba(48,209,88,0.2);
-    }
-    .bookmark-title {
-      margin-bottom: 12px;
-      clear: both;
-      font-size:32px;
-      padding-top:32px;
-      margin-top: 0px;
-    }
-    .info p {
-      font-size: 12px;
-      margin: 0px;
-      margin-top:4px;
-      text-align:left;
-    }
-    .info {
-      bottom: 0px;
-      position: fixed;
-      backdrop-filter: saturate(180%) blur(20px);
-      -webkit-backdrop-filter: saturate(180%) blur(20px);;
-      width: 160px;
-      padding: 20px;
-      padding-top: 12px;
-      padding-bottom: 12px;
-      z-index: 999;
-    }
-    .coffe svg{
-      color:#000;
-    }
-    .coffe :hover{
-      color:rgba(0,0,0,0.5);
-    }
-    .share {
-      background-image: linear-gradient(-45deg, #E0EA5E 0%, #30D158 100%);
-      width: 64px;
-      height: 64px;
-      border-radius: 32px;
-      position: fixed;  
-      top: 40px;
-      right: 40px;
-    }
-    .share svg {
-      font-size: 30px;
-      padding:20px;
-      color:#000;
-      transition: all 0.3s;
-    }
-    .share svg:hover { 
-      transform: rotateZ(-90deg) scale(1.3);
-    }
-    @media (prefers-color-scheme: dark) {
-      body {
-        background-image: linear-gradient(45deg, #0A2A12 0%, #2D2F13 100%);
-        color:#fff;
-      }
-      .content li a {
-        color: #fff;
-      }
-      .content li {
-        background: rgba(250,250,250,0.05);
-      }
-    }
-  </style>`;
-
+  const styles = ``;
   let html = `
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
