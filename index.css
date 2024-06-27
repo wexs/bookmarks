@@ -9,7 +9,7 @@ body {
 
 .sidebar {
     width: 250px;
-    background-color: #f8f8f8;
+    background-color: #9af384;
     padding: 20px;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     overflow-y: auto;
@@ -71,8 +71,7 @@ body {
 }
 
 #bookmarkMenu {
-    width: 250px;
-    background-color: #f8f8f8;
+    background-color: #9af384;
     padding: 20px;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     overflow-y: auto;

@@ -45,11 +45,23 @@
         </a>
     </div>
 
-    <div class="motioned">
+    <div class="motioned" style="display: none">
         <div id="loginBut" class="login">登录</div>
         <div id="registerBut" class="register">注册</div>
     </div>
-    <div id="myModal" class="modal">
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <form id="loginForm">
+                <label for="email">邮箱:</label><br>
+                <input type="text" id="email" name="email"><br>
+                <label for="password">密码:</label><br>
+                <input type="password" id="password" name="password"><br><br>
+                <button type="submit">确定</button>
+            </form>
+        </div>
+    </div>
+    <div id="registerModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
             <form id="registerForm">

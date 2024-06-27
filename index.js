@@ -1,11 +1,14 @@
 document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('loginBut').addEventListener('click', function () {
+        document.getElementById('loginModal').style.display = "block";
+    });
     document.getElementById('registerBut').addEventListener('click', function () {
-        alert('Button clicked!');
-        document.getElementById('myModal').style.display = "block";
+        document.getElementById('registerModal').style.display = "block";
     });
 
     document.getElementsByClassName('close')[0].addEventListener('click', function () {
-        document.getElementById('myModal').style.display = "none";
+        document.getElementById('loginModal').style.display = "none";
+        document.getElementById('registerModal').style.display = "none";
     });
 
     window.addEventListener('click', function (event) {
@@ -14,14 +17,37 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    document.getElementById('loginModal').addEventListener('submit', function (event) {
+        event.preventDefault();
+        const password = document.getElementById('password').value;
+        const email = document.getElementById('email').value;
+        fetch('http://127.0.0.1:30001/api/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ password, email })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('登录成功！');
+                    document.getElementById('loginModal').style.display = "none";
+                } else {
+                    alert('登录失败：' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('登录失败，请稍后再试。');
+            });
+    });
     document.getElementById('registerForm').addEventListener('submit', function (event) {
         event.preventDefault();
-
         const name = document.getElementById('name').value;
         const password = document.getElementById('password').value;
         const email = document.getElementById('email').value;
-
-        fetch('http://yd.3702740.xyz:30001/api/auth/register', {
+        fetch('http://127.0.0.1:30001/api/auth/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
