@@ -152,6 +152,18 @@ form button {
 form button:hover {
     background-color: #45a049;
 }
+.motioned{
+    position: fixed;
+    top: 36px;
+    right: 68px;
+    display: flex;
+}
+.motioned .login, .motioned .register{
+    color: #0056b3;
+    font-size: 14px;
+    padding: 0 10px;
+    cursor: pointer;
+}
 
 @media (prefers-color-scheme: dark) {
     body {

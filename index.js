@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('buttonFn').addEventListener('click', function () {
+    document.getElementById('registerBut').addEventListener('click', function () {
         alert('Button clicked!');
         document.getElementById('myModal').style.display = "block";
     });
