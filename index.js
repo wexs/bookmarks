@@ -88,7 +88,7 @@ function generateSidebarHtml(nodes) {
     function generateSidebarItems(nodes) {
         nodes.forEach((node) => {
             if (node.children && node.children.length > 0) {
-                html += `<li><a href="#" class="sidebar-item" data-id="${node.id}">${node.title}</a></li>`;
+                html += `<li><a class="sidebar-item" data-id="${node.id}">${node.title}</a></li>`;
                 node.children.forEach((child) => {
                     generateSidebarItems([child]);
                 });
