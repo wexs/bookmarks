@@ -12,17 +12,11 @@ document.getElementById('exportHtml').addEventListener('click', () => {
 
 document.getElementById('openInNewTab').addEventListener('click', () => {
   chrome.bookmarks.getTree((bookmarkTreeNodes) => {
-    const bookmarkHtml = convertToHtml(bookmarkTreeNodes);
-    const formattedHtml = formatHtml(bookmarkHtml);
-    const blob = new Blob([formattedHtml], { type: 'text/html' });
-    const url = URL.createObjectURL(blob);
-    chrome.tabs.create({ url });
+    chrome.storage.local.set({ bookmarkTree: bookmarkTreeNodes }, () => {
+      const url = chrome.runtime.getURL('index.html');
+      chrome.tabs.create({ url });
+    });
   });
-});
-
-document.getElementById('openIndex').addEventListener('click', () => {
-  const url = chrome.runtime.getURL('index.html');
-  chrome.tabs.create({ url });
 });
 
 function exportToJson(bookmarkTreeNodes) {

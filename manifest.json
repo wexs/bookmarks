@@ -5,7 +5,9 @@
   "description": "一键导出书签为JSON或HTML文件。",
   "permissions": [
     "bookmarks",
-    "tabs"
+    "tabs",
+    "activeTab",
+    "storage"
   ],
   "action": {
     "default_popup": "popup.html"
@@ -14,5 +16,8 @@
     "16": "icon.png",
     "48": "icon.png",
     "128": "icon.png"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
   }
 }
