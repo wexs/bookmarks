@@ -51,6 +51,7 @@ body {
   .sidebar ul li {
     margin: 10px 0;
     font-weight: bold;
+    cursor: pointer;
   }
   .sidebar ul li a {
     color: rgb(0, 97, 21);
