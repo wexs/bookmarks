@@ -37,20 +37,28 @@ body {
   .sidebar p {
     text-align: center;
     margin-top:8px;
+    margin-bottom: 0px;
     font-size: 12px;
     color:rgba(0,0,0,0.35);
   }
   .sidebar ul {
     list-style-type: none;
     padding: 20px;
-    padding-top: 0px;
+    padding-top: 12px;
     padding-bottom: 80px;
     font-size: 16px;
     margin-top: 0px;
   }
+  /*有一个多余元素，空文件夹👇*/
+  .sidebar ul > li:first-child {
+    height: 0;
+    width: 0;
+    overflow: hidden;
+  }
   .sidebar ul li {
     margin: 10px 0;
     font-weight: bold;
+    cursor: pointer;
   }
   .sidebar ul li a {
     color: rgb(0, 97, 21);

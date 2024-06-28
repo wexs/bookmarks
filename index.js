@@ -146,3 +146,19 @@ function setupSidebarClickHandlers() {
     });
 }
 
+//书签总数！
+function countBookmarks(nodes) {
+    let count = 0;
+    nodes.forEach((node) => {
+      if (node.url) {
+        count++;
+      } else if (node.children) {
+        count += countBookmarks(node.children);
+      }
+    });
+    return count;
+  }
+  chrome.bookmarks.getTree((bookmarkTreeNodes) => {
+    const totalBookmarks = countBookmarks(bookmarkTreeNodes);
+    document.getElementById('bookmarkCount').innerText = `—— Total: ${totalBookmarks} ——`;
+  });

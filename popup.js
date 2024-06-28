@@ -24,15 +24,3 @@ function exportToJson(bookmarkTreeNodes) {
   URL.revokeObjectURL(url);
 }
 
-function countBookmarks(nodes) {
-  let count = 0;
-  nodes.forEach((node) => {
-    if (node.url) {
-      count++;
-    } else if (node.children) {
-      count += countBookmarks(node.children);
-    }
-  });
-  return count;
-}
-
