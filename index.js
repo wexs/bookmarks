@@ -6,6 +6,13 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('registerModal').style.display = "block";
     });
 
+    document.getElementById('logout').addEventListener('click', function () {
+        document.getElementById('loginBut').style.display = "block";
+        document.getElementById('registerBut').style.display = "block";
+        document.getElementById('logout').style.display = "none";
+        document.getElementById('userName').style.display = "none";
+    });
+
     document.getElementsByClassName('close')[0].addEventListener('click', function () {
         document.getElementById('loginModal').style.display = "none";
         document.getElementById('registerModal').style.display = "none";
@@ -29,17 +36,21 @@ document.addEventListener('DOMContentLoaded', function () {
             body: JSON.stringify({ password, email })
         })
             .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('登录成功！');
+            .then(res => {
+                if (res.status) {
+                    document.getElementById("userName").innerHTML = `${res.data.user.name} 欢迎您！`
                     document.getElementById('loginModal').style.display = "none";
+                    document.getElementById('loginBut').style.display = "none";
+                    document.getElementById('registerBut').style.display = "none";
+                    document.getElementById('logout').style.display = "block";
+                    document.getElementById('userName').style.display = "block";
                 } else {
-                    alert('登录失败：' + data.message);
+                    alert('登录失败：' + res.message);
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('登录失败，请稍后再试。');
+                // alert('登录失败，请稍后再试。');
             });
     });
     document.getElementById('registerForm').addEventListener('submit', function (event) {
@@ -56,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function () {
         })
             .then(response => response.json())
             .then(data => {
-                if (data.success) {
+                if (data.status) {
                     alert('注册成功！');
                     document.getElementById('myModal').style.display = "none";
                 } else {
