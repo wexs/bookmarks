@@ -133,11 +133,9 @@ body {
     position: fixed;
     background-color: rgba(0, 0, 0, 0.05);
     backdrop-filter: saturate(180%) blur(20px);
-    -webkit-backdrop-filter: saturate(180%) blur(20px);;
-    width: 136px;
-    padding: 20px;
-    padding-top: 12px;
-    padding-bottom: 12px;
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    width: calc( 200px - 81px );
+    padding: 12px 20px;
     z-index: 999;
     margin: 12px;
     border-radius: 12px;
