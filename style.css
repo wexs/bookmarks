@@ -134,11 +134,9 @@ body {
     background-color: rgba(0, 0, 0, 0.05);
     backdrop-filter: saturate(180%) blur(20px);
     -webkit-backdrop-filter: saturate(180%) blur(20px);
-    width: calc( 200px - 81px );
+    width: 160px;
     padding: 12px 20px;
     z-index: 999;
-    margin: 12px;
-    border-radius: 12px;
   }
   .coffe svg{
     color:#000;
