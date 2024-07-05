@@ -152,6 +152,7 @@ body {
     position: fixed;  
     top: 40px;
     right: 40px;
+    cursor: pointer;
   }
   .share svg {
     font-size: 30px;
