@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "书签导出插件",
+  "name": "Bookmark Manage",
   "version": "1.1",
-  "description": "一键导出书签为JSON或HTML文件。",
+  "description": "Generate all your bookmarks with one click into a page that is easy to navigate and manage",
   "permissions": [
     "bookmarks",
     "tabs",
