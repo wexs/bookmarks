@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "书签导出插件",
   "version": "1.1",
-  "description": "一键导出书签为JSON或HTML文件。",
+  "description": "一键导出书签为JSON或HTML预览。",
   "permissions": [
     "bookmarks",
     "tabs",
