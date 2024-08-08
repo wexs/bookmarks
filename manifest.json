@@ -5,8 +5,6 @@
   "description": "Generate all your bookmarks with one click into a page that is easy to navigate and manage",
   "permissions": [
     "bookmarks",
-    "tabs",
-    "activeTab",
     "storage"
   ],
   "action": {
