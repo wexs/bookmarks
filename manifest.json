@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Bookmark Cat",
-  "version": "1.1",
+  "version": "1.2",
   "description": "Generate all your bookmarks with one click into a page that is easy to navigate and manage",
   "permissions": [
     "bookmarks",
