@@ -11,6 +11,29 @@ document.addEventListener('DOMContentLoaded', function () {
             setupSidebarClickHandlers();
         }
     });
+
+    document.getElementById('shareLink').addEventListener('click', function () {
+        fetch('http://yd.3702740.xyz:30001/api/temp/save', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ data: bookmarkTreeNodes })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status) {
+                    window.open(`http://yd.3702740.xyz:800/?code=${data.data.code}`, "_blank",);
+                } else {
+                    alert('分享失败，请稍后再试！' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('分享失败，请稍后再试！');
+            });
+    });
+
 });
 
 function generateSidebarHtml(nodes) {
