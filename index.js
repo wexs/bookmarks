@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     document.getElementById('shareLink').addEventListener('click', function () {
-        fetch('http://yd.3702740.xyz:30001/api/temp/save', {
+        fetch('https://serve.3702740.xyz/api/temp/save', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(response => response.json())
             .then(data => {
                 if (data.status) {
-                    window.open(`http://yd.3702740.xyz:800/?code=${data.data.code}`, "_blank",);
+                    window.open(`https://web.3702740.xyz/?code=${data.data.code}`, "_blank",);
                 } else {
                     alert('分享失败，请稍后再试！' + data.message);
                 }
