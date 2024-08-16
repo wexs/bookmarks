@@ -2,7 +2,7 @@
 Helps users easily export bookmarks in the browser to JSON or HTML files. Whether it's backing up, organizing, or sharing bookmarks, Bookmark Export Assistant provides you with a convenient and efficient solution.
 
 
-## 核心功能：
+## Core Functions:
 
 1. ** One-click export bookmarks **: Support exporting bookmarks to JSON or HTML format to meet the needs of different users.
 2. ** Intuitive HTML bookmark page **: The exported HTML page is beautiful and elegant, with a flat design, bright colors and simple layout, which enhances the visual experience.
@@ -12,7 +12,7 @@ Helps users easily export bookmarks in the browser to JSON or HTML files. Whethe
 6. ** Simple UI design **: The page adopts a flat design, eliminating redundant shadows and strokes, the overall style is fresh and simple, and the bookmarks are displayed in the form of cards, which enhances the user experience.
 7. ** Bookmark classification **: Classify and organize according to the user's bookmark folder, and display all non-empty bookmark folders in the sidebar for easy browsing and management.
 
-## 使用场景：
+## Use scenario:
 
 - Backup and migration of bookmarks: Help users migrate bookmarks between different devices or browsers to avoid data loss.
 
