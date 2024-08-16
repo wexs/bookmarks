@@ -1,21 +1,23 @@
 # bookmarks
-帮助用户轻松地将浏览器中的书签导出为JSON或HTML格式的文件。无论是备份、整理还是分享书签，书签导出助手都能为您提供便捷、高效的解决方案。
+Helps users easily export bookmarks in the browser to JSON or HTML files. Whether it's backing up, organizing, or sharing bookmarks, Bookmark Export Assistant provides you with a convenient and efficient solution.
 
 
 ## 核心功能：
 
-1. **一键导出书签**：支持将书签导出为JSON或HTML格式，满足不同用户的需求。
-2. **直观的HTML书签页面**：导出的HTML页面美观大方，采用扁平化设计，色彩鲜艳、布局简洁，提升视觉体验。
-3. **自动获取网站图标**：导出的HTML页面中，每个书签都自动获取并显示相应网站的favicon，让书签列表更加直观和生动。
-4. **侧边栏导航**：HTML书签页面配有左侧固定的书签文件夹导航栏，便于快速浏览和查找特定书签。
-5. **直接在新标签页打开HTML文件**：除了下载到本地，用户还可以选择直接在新标签页中打开生成的HTML书签页面，方便快捷。
-6. **简洁的UI设计**：页面采用扁平化设计，取消了多余的阴影和描边效果，整体风格清新简约，并且书签以卡片形式展示，增强了用户体验。
-7. **书签分类**：根据用户书签文件夹进行分类整理，并在侧边栏显示所有非空的书签文件夹，便于浏览和管理。
+1. ** One-click export bookmarks **: Support exporting bookmarks to JSON or HTML format to meet the needs of different users.
+2. ** Intuitive HTML bookmark page **: The exported HTML page is beautiful and elegant, with a flat design, bright colors and simple layout, which enhances the visual experience.
+3. ** Automatically get website icons **: In the exported HTML page, each bookmark automatically gets and displays the favicon of the corresponding website, making the bookmark list more intuitive and vivid.
+4. ** Sidebar Navigation **: HTML bookmark pages come with a fixed bookmark folder navigation bar on the left for quick browsing and finding specific bookmarks.
+5. Open the HTML file directly in the new tab: In addition to downloading to the local, users can also choose to open the generated HTML bookmark page directly in the new tab, which is convenient and fast.
+6. ** Simple UI design **: The page adopts a flat design, eliminating redundant shadows and strokes, the overall style is fresh and simple, and the bookmarks are displayed in the form of cards, which enhances the user experience.
+7. ** Bookmark classification **: Classify and organize according to the user's bookmark folder, and display all non-empty bookmark folders in the sidebar for easy browsing and management.
 
 ## 使用场景：
 
-- 备份和迁移书签：帮助用户在不同设备或浏览器之间迁移书签，避免数据丢失。
-- 分享书签：将整理好的书签以美观的HTML页面分享给朋友或同事，方便快捷。
-- 整理和管理书签：帮助用户整理杂乱的书签，让书签管理更加高效。
+- Backup and migration of bookmarks: Help users migrate bookmarks between different devices or browsers to avoid data loss.
+
+- Share bookmarks: Share the sorted bookmarks with friends or colleagues on a beautiful HTML page, which is convenient and fast.
+
+- Organize and manage bookmarks: help users sort out messy bookmarks to make bookmark management more efficient.
 
 
