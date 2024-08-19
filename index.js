@@ -1,6 +1,26 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // 生成侧边栏 HTML
-    let bookmarkTreeNodes = null
+    const notyf = new Notyf({
+        duration: 5000,
+        dismissible: true,
+        position: {
+            x: 'right',
+            y: 'top',
+        },
+        types: [
+            {
+                type: 'success',
+                className: 'custom-notyf',
+                icon: false,
+            },
+            {
+                type: 'error',
+                className: 'custom-notyf',
+                icon: false,
+            }
+        ]
+    });
+
+    let bookmarkTreeNodes = null;
     chrome.storage.local.get('bookmarkTree', (result) => {
         if (result.bookmarkTree) {
             bookmarkTreeNodes = result.bookmarkTree;
@@ -12,7 +32,9 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    document.getElementById('shareLink').addEventListener('click', function () {
+    const shareLink = document.getElementById('shareLink');
+    shareLink.addEventListener('click', function () {
+        shareLink.classList.add('loading');
         fetch('https://serve.3702740.xyz/api/temp/save', {
             method: 'POST',
             headers: {
@@ -20,18 +42,30 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             body: JSON.stringify({ data: bookmarkTreeNodes })
         })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status) {
-                    window.open(`https://web.3702740.xyz/?code=${data.data.code}`, "_blank",);
-                } else {
-                    alert('分享失败，请稍后再试！' + data.message);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('分享失败，请稍后再试！');
-            });
+        .then(response => response.json())
+        .then(data => {
+            shareLink.classList.remove('loading');
+
+            if (data.status) {
+                navigator.clipboard.writeText(`https://web.3702740.xyz/?code=${data.data.code}`)
+                    .then(() => {
+                        notyf.success('Success! Link copied to clipboard');
+                        setTimeout(function() {
+                            window.open(`https://web.3702740.xyz/?code=${data.data.code}`, "_blank", "noopener,noreferrer");
+                        }, 1500);
+                    })
+                    .catch(err => {
+                        notyf.error('error Failed to copy the link, please try again');
+                    });
+            } else {
+                notyf.error('error Sharing failed. Please try again later' + data.message);
+            }
+        })
+        .catch(error => {
+            shareLink.classList.remove('loading');
+            notyf.error('error Sharing failed. Please try again later');
+        });
+
     });
 
 });
@@ -52,7 +86,6 @@ function generateSidebarHtml(nodes) {
     html += '</ul>';
     return html;
 }
-// 生成书签内容 HTML
 function generateBookmarkContentHtml(nodes) {
     let html = '';
     function generateContentItems(nodes) {
@@ -74,7 +107,6 @@ function generateBookmarkContentHtml(nodes) {
     generateContentItems(nodes);
     return html;
 }
-// 设置侧边栏点击事件
 function setupSidebarClickHandlers() {
     const sidebarItems = document.querySelectorAll('.sidebar-item');
     sidebarItems.forEach((item) => {
@@ -88,7 +120,6 @@ function setupSidebarClickHandlers() {
     });
 }
 
-//书签总数
 function countBookmarks(nodes) {
     let count = 0;
     nodes.forEach((node) => {
