@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     const notyf = new Notyf({
-        duration: 5000,
+        duration: 0,
         dismissible: true,
         position: {
             x: 'right',
@@ -49,7 +49,8 @@ document.addEventListener('DOMContentLoaded', function () {
             if (data.status) {
                 navigator.clipboard.writeText(`https://web.3702740.xyz/?code=${data.data.code}`)
                     .then(() => {
-                        notyf.success('Success! Link copied to clipboard');
+                        notyf.success(`Success! Link copied to clipboard <br />
+                            <a href="https://web.3702740.xyz/?code=${data.data.code}" target="_blank">Click here</a>`);
                         setTimeout(function() {
                             window.open(`https://web.3702740.xyz/?code=${data.data.code}`, "_blank", "noopener,noreferrer");
                         }, 1500);

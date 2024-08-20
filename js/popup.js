@@ -7,7 +7,7 @@ document.getElementById('exportJson').addEventListener('click', () => {
 document.getElementById('openIndex').addEventListener('click', () => {
   chrome.bookmarks.getTree((bookmarkTreeNodes) => {
     chrome.storage.local.set({ bookmarkTree: bookmarkTreeNodes }, () => {
-      const url = chrome.runtime.getURL('index.html');
+      const url = chrome.runtime.getURL('../page/index.html');
       chrome.tabs.create({ url });
     });
   });
