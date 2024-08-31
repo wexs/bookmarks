@@ -45,7 +45,6 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(response => response.json())
         .then(data => {
             shareLink.classList.remove('loading');
-
             if (data.status) {
                 navigator.clipboard.writeText(`https://web.3702740.xyz/?code=${data.data.code}`)
                     .then(() => {
