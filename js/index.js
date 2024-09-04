@@ -1,91 +1,3 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const notyf = new Notyf({
-        duration: 0,
-        dismissible: true,
-        position: {
-            x: 'right',
-            y: 'top',
-        },
-        types: [
-            {
-                type: 'success',
-                className: 'custom-notyf',
-                icon: false,
-            },
-            {
-                type: 'error',
-                className: 'custom-notyf',
-                icon: false,
-            }
-        ]
-    });
-
-    let bookmarkTreeNodes = null;
-    chrome.storage.local.get('bookmarkTree', (result) => {
-        if (result.bookmarkTree) {
-            bookmarkTreeNodes = result.bookmarkTree;
-            const sidebarHtml = generateSidebarHtml(bookmarkTreeNodes);
-            document.getElementById('bookmarkMenu').innerHTML = sidebarHtml;
-            const contentHtml = generateBookmarkContentHtml(bookmarkTreeNodes);
-            document.getElementById('bookmarkContent').innerHTML = contentHtml;
-            setupSidebarClickHandlers();
-        }
-    });
-
-    const shareLink = document.getElementById('shareLink');
-    shareLink.addEventListener('click', function () {
-        shareLink.classList.add('loading');
-        fetch('https://serve.3702740.xyz/api/temp/save', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ data: bookmarkTreeNodes })
-        })
-        .then(response => response.json())
-        .then(data => {
-            shareLink.classList.remove('loading');
-            if (data.status) {
-                navigator.clipboard.writeText(`https://web.3702740.xyz/?code=${data.data.code}`)
-                    .then(() => {
-                        notyf.success(`Success! Link copied to clipboard <br />
-                            <a href="https://web.3702740.xyz/?code=${data.data.code}" target="_blank">Click here</a>`);
-                        setTimeout(function() {
-                            window.open(`https://web.3702740.xyz/?code=${data.data.code}`, "_blank", "noopener,noreferrer");
-                        }, 1500);
-                    })
-                    .catch(err => {
-                        notyf.error('error Failed to copy the link, please try again');
-                    });
-            } else {
-                notyf.error('error Sharing failed. Please try again later' + data.message);
-            }
-        })
-        .catch(error => {
-            shareLink.classList.remove('loading');
-            notyf.error('error Sharing failed. Please try again later');
-        });
-
-    });
-
-});
-
-function generateSidebarHtml(nodes) {
-    let html = '<ul>';
-    function generateSidebarItems(nodes) {
-        nodes.forEach((node) => {
-            if (node.children && node.children.length > 0) {
-                html += `<li><a class="sidebar-item" data-id="${node.id}">${node.title}</a></li>`;
-                node.children.forEach((child) => {
-                    generateSidebarItems([child]);
-                });
-            }
-        });
-    }
-    generateSidebarItems(nodes);
-    html += '</ul>';
-    return html;
-}
 function generateBookmarkContentHtml(nodes) {
     let html = '';
     function generateContentItems(nodes) {
@@ -109,6 +21,7 @@ function generateBookmarkContentHtml(nodes) {
 }
 function setupSidebarClickHandlers() {
     const sidebarItems = document.querySelectorAll('.sidebar-item');
+    console.log(sidebarItems);
     sidebarItems.forEach((item) => {
         item.addEventListener('click', function () {
             const id = item.getAttribute('data-id');
@@ -119,19 +32,129 @@ function setupSidebarClickHandlers() {
         });
     });
 }
-
-function countBookmarks(nodes) {
-    let count = 0;
-    nodes.forEach((node) => {
-      if (node.url) {
-        count++;
-      } else if (node.children) {
-        count += countBookmarks(node.children);
-      }
+if(chrome?.bookmarks?.getTree){
+    document.addEventListener('DOMContentLoaded', function () {
+        const notyf = new Notyf({
+            duration: 0,
+            dismissible: true,
+            position: {
+                x: 'right',
+                y: 'top',
+            },
+            types: [
+                {
+                    type: 'success',
+                    className: 'custom-notyf',
+                    icon: false,
+                },
+                {
+                    type: 'error',
+                    className: 'custom-notyf',
+                    icon: false,
+                }
+            ]
+        });
+    
+        let bookmarkTreeNodes = null;
+        chrome.storage.local.get('bookmarkTree', (result) => {
+            if (result.bookmarkTree) {
+                bookmarkTreeNodes = result.bookmarkTree;
+                const sidebarHtml = generateSidebarHtml(bookmarkTreeNodes);
+                document.getElementById('bookmarkMenu').innerHTML = sidebarHtml;
+                const contentHtml = generateBookmarkContentHtml(bookmarkTreeNodes);
+                document.getElementById('bookmarkContent').innerHTML = contentHtml;
+                setupSidebarClickHandlers();
+            }
+        });
+    
+        const shareLink = document.getElementById('shareLink');
+        shareLink.addEventListener('click', function () {
+            shareLink.classList.add('loading');
+            fetch('https://serve.3702740.xyz/api/temp/save', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ data: bookmarkTreeNodes })
+            })
+            .then(response => response.json())
+            .then(data => {
+                shareLink.classList.remove('loading');
+                if (data.status) {
+                    navigator.clipboard.writeText(`https://web.3702740.xyz/?code=${data.data.code}`)
+                        .then(() => {
+                            notyf.success(`Success! Link copied to clipboard <br />
+                                <a href="https://web.3702740.xyz/?code=${data.data.code}" target="_blank">Click here</a>`);
+                            setTimeout(function() {
+                                window.open(`https://web.3702740.xyz/?code=${data.data.code}`, "_blank", "noopener,noreferrer");
+                            }, 1500);
+                        })
+                        .catch(err => {
+                            notyf.error('error Failed to copy the link, please try again');
+                        });
+                } else {
+                    notyf.error('error Sharing failed. Please try again later' + data.message);
+                }
+            })
+            .catch(error => {
+                shareLink.classList.remove('loading');
+                notyf.error('error Sharing failed. Please try again later');
+            });
+    
+        });
+    
     });
-    return count;
-  }
-  chrome.bookmarks.getTree((bookmarkTreeNodes) => {
-    const totalBookmarks = countBookmarks(bookmarkTreeNodes);
-    document.getElementById('bookmarkCount').innerText = `—— Total: ${totalBookmarks} ——`;
-  });
+    
+    function generateSidebarHtml(nodes) {
+        let html = '<ul>';
+        function generateSidebarItems(nodes) {
+            nodes.forEach((node) => {
+                if (node.children && node.children.length > 0) {
+                    html += `<li><a class="sidebar-item" data-id="${node.id}">${node.title}</a></li>`;
+                    node.children.forEach((child) => {
+                        generateSidebarItems([child]);
+                    });
+                }
+            });
+        }
+        generateSidebarItems(nodes);
+        html += '</ul>';
+        return html;
+    }
+    
+    function countBookmarks(nodes) {
+        let count = 0;
+        nodes.forEach((node) => {
+          if (node.url) {
+            count++;
+          } else if (node.children) {
+            count += countBookmarks(node.children);
+          }
+        });
+        return count;
+      }
+    chrome.bookmarks.getTree((bookmarkTreeNodes) => {
+        const totalBookmarks = countBookmarks(bookmarkTreeNodes);
+        document.getElementById('bookmarkCount').innerText = `—— Total: ${totalBookmarks} ——`;
+    });
+}else{
+    document.getElementById('shareLink').style.display = 'none';
+    const urlParams = new URLSearchParams(window.location.search);
+    fetch(`https://serve.3702740.xyz/api/temp/get/${urlParams.get('code')}`, {method: 'GET'})
+    .then(response => {
+        console.log(response);
+        return response.json();
+    })
+    .then(data => {
+        const sidebarHtml = generateSidebarHtml(data);
+        console.log('sidebarHtml',sidebarHtml);
+        document.getElementById('bookmarkMenu').innerHTML = sidebarHtml;
+        const contentHtml = generateBookmarkContentHtml(data);
+        console.log('contentHtml',contentHtml);
+        document.getElementById('bookmarkContent').innerHTML = contentHtml;
+        setupSidebarClickHandlers();
+    })
+    .catch(error => {
+        console.log(error);
+    });
+}
