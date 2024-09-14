@@ -1,11 +1,12 @@
 {
   "manifest_version": 3,
   "name": "Bookmark Cat",
-  "version": "1.5",
+  "version": "1.6",
   "description": "Generate all your bookmarks with one click into a page that is easy to navigate and manage",
   "permissions": [
     "bookmarks",
-    "storage"
+    "storage",
+    "downloads"
   ],
   "action": {
     "default_popup": "./popup.html"
