@@ -12,7 +12,28 @@ function generateBookmarkContentHtml(nodes) {
                 const domain = new URL(node.url).hostname.replace('www.', '');
                 const faviconUrl = `https://www.google.com/s2/favicons?sz=64&domain_url=${domain}`;
                 const displayTitle = node.title || node.url;
-                html += `<li class="link"><a href="${node.url}" target="_blank"><img src="${faviconUrl}" onerror="this.onerror=null;this.src='https://api.faviconkit.com/${domain}/64';" alt="Icon">${displayTitle}</a></li>`;
+                // 添加包含按钮的容器（只保留编辑和删除按钮）
+                html += `
+                <li class="link" data-id="${node.id}">
+                    <a href="${node.url}" target="_blank">
+                        <img src="${faviconUrl}" onerror="this.onerror=null;this.src='https://api.faviconkit.com/${domain}/64';" alt="Icon">
+                        ${displayTitle}
+                    </a>
+                    <div class="bookmark-actions">
+                        <button class="action-btn edit-btn" title="Edit" data-id="${node.id}" data-title="${escapeHtml(displayTitle)}" data-url="${escapeHtml(node.url)}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                            </svg>
+                        </button>
+                        <button class="action-btn delete-btn" title="Delete" data-id="${node.id}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                                <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </li>`;
             }
         });
     }
@@ -29,6 +50,23 @@ function setupSidebarClickHandlers() {
                 target.scrollIntoView({ behavior: 'smooth' });
             }
         });
+    });
+
+    // 添加编辑按钮事件监听器
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('.edit-btn')) {
+            const editBtn = e.target.closest('.edit-btn');
+            const bookmarkId = editBtn.getAttribute('data-id');
+            const currentTitle = editBtn.getAttribute('data-title');
+            const currentUrl = editBtn.getAttribute('data-url');
+            editBookmark(bookmarkId, currentTitle, currentUrl);
+        }
+        
+        if (e.target.closest('.delete-btn')) {
+            const deleteBtn = e.target.closest('.delete-btn');
+            const bookmarkId = deleteBtn.getAttribute('data-id');
+            deleteBookmark(bookmarkId);
+        }
     });
 }
 function generateSidebarHtml(nodes) {
@@ -152,4 +190,153 @@ if (chrome?.bookmarks?.getTree) {
         .catch(error => {
             console.error('Error:', error);
         });
+}
+
+function escapeHtml(unsafe) {
+    return unsafe
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+// 添加编辑书签的函数
+function editBookmark(bookmarkId, currentTitle, currentUrl) {
+    // 创建模态框
+    const modal = document.createElement('div');
+    modal.className = 'modal';
+    modal.id = 'editBookmarkModal';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Edit Bookmark</h2>
+            <form id="editBookmarkForm">
+                <label for="editTitle">Title:</label>
+                <input type="text" id="editTitle" value="${currentTitle}" required>
+                <label for="editUrl">URL:</label>
+                <input type="url" id="editUrl" value="${currentUrl}" required>
+                <button type="submit">Save Changes</button>
+            </form>
+        </div>
+    `;
+    document.body.appendChild(modal);
+
+    // 显示模态框
+    modal.style.display = 'block';
+
+    // 关闭模态框事件
+    const closeBtn = modal.querySelector('.close');
+    closeBtn.onclick = function() {
+        modal.style.display = 'none';
+        document.body.removeChild(modal);
+    }
+
+    // 点击模态框外部关闭
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = 'none';
+            document.body.removeChild(modal);
+        }
+    }
+
+    // 表单提交事件
+    const form = document.getElementById('editBookmarkForm');
+    form.onsubmit = function(e) {
+        e.preventDefault();
+        const newTitle = document.getElementById('editTitle').value;
+        const newUrl = document.getElementById('editUrl').value;
+        
+        // 使用 Chrome bookmarks API 更新书签
+        if (chrome?.bookmarks?.update) {
+            chrome.bookmarks.update(bookmarkId, {
+                title: newTitle,
+                url: newUrl
+            }, (updatedBookmark) => {
+                if (chrome.runtime.lastError) {
+                    console.error('Error updating bookmark:', chrome.runtime.lastError);
+                    alert('Failed to update bookmark: ' + chrome.runtime.lastError.message);
+                } else {
+                    // 更新页面上的显示
+                    updateBookmarkDisplay(bookmarkId, newTitle, newUrl);
+                    // 更新localStorage中的书签数据
+                    updateLocalStorageBookmarks();
+                }
+            });
+        } else {
+            // 如果没有 Chrome API 权限，只更新页面上的显示
+            updateBookmarkDisplay(bookmarkId, newTitle, newUrl);
+        }
+        
+        // 关闭模态框
+        modal.style.display = 'none';
+        document.body.removeChild(modal);
+    }
+}
+
+// 更新书签显示
+function updateBookmarkDisplay(bookmarkId, newTitle, newUrl) {
+    const bookmarkElement = document.querySelector(`.link[data-id="${bookmarkId}"]`);
+    if (bookmarkElement) {
+        const linkElement = bookmarkElement.querySelector('a');
+        linkElement.href = newUrl;
+        linkElement.innerHTML = `
+            ${linkElement.innerHTML.split('>')[0]}>${escapeHtml(newTitle)}
+        `;
+    }
+}
+
+// 添加删除书签的函数
+function deleteBookmark(bookmarkId) {
+    if (confirm('Are you sure you want to delete this bookmark?')) {
+        // 使用 Chrome bookmarks API 真正删除书签
+        if (chrome?.bookmarks?.remove) {
+            chrome.bookmarks.remove(bookmarkId, () => {
+                if (chrome.runtime.lastError) {
+                    console.error('Error deleting bookmark:', chrome.runtime.lastError);
+                    alert('Failed to delete bookmark: ' + chrome.runtime.lastError.message);
+                } else {
+                    // 从页面上移除书签
+                    const bookmarkElement = document.querySelector(`.link[data-id="${bookmarkId}"]`);
+                    if (bookmarkElement) {
+                        bookmarkElement.remove();
+                    }
+                    // 更新书签计数
+                    updateBookmarkCount();
+                    // 更新localStorage中的书签数据
+                    updateLocalStorageBookmarks();
+                }
+            });
+        } else {
+            // 如果没有 Chrome API 权限，只在页面上移除
+            const bookmarkElement = document.querySelector(`.link[data-id="${bookmarkId}"]`);
+            if (bookmarkElement) {
+                bookmarkElement.remove();
+            }
+        }
+    }
+}
+
+// 更新localStorage中的书签数据
+function updateLocalStorageBookmarks() {
+    if (chrome?.bookmarks?.getTree) {
+        chrome.bookmarks.getTree((bookmarkTreeNodes) => {
+            // 更新localStorage中的数据
+            chrome.storage.local.set({ bookmarkTree: bookmarkTreeNodes }, () => {
+                if (chrome.runtime.lastError) {
+                    console.error('Error updating localStorage:', chrome.runtime.lastError);
+                }
+            });
+        });
+    }
+}
+
+// 更新书签计数
+function updateBookmarkCount() {
+    if (chrome?.bookmarks?.getTree) {
+        chrome.bookmarks.getTree((bookmarkTreeNodes) => {
+            const totalBookmarks = countBookmarks(bookmarkTreeNodes);
+            document.getElementById('bookmarkCount').innerText = `—— Total: ${totalBookmarks} ——`;
+        });
+    }
 }

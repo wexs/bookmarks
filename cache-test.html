@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Bookmark Cat - Cache Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+        .button {
+            margin: 10px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Bookmark Cat - Cache Test</h1>
+    
+    <div class="test-section">
+        <h2>Test localStorage Access</h2>
+        <button id="testLocalStorage" class="button">Test localStorage</button>
+        <button id="clearLocalStorage" class="button">Clear localStorage</button>
+    </div>
+    
+    <div class="test-section">
+        <h2>Current localStorage Data</h2>
+        <button id="showBookmarks" class="button">Show Bookmarks in localStorage</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        // 显示结果
+        function showResult(message) {
+            document.getElementById('result').innerHTML = message;
+        }
+
+        // 测试localStorage访问
+        document.getElementById('testLocalStorage').addEventListener('click', () => {
+            try {
+                localStorage.setItem('test', 'test value');
+                const value = localStorage.getItem('test');
+                showResult(`localStorage is working. Test value: ${value}`);
+                localStorage.removeItem('test');
+            } catch (e) {
+                showResult(`Error accessing localStorage: ${e.message}`);
+            }
+        });
+
+        // 清除localStorage
+        document.getElementById('clearLocalStorage').addEventListener('click', () => {
+            try {
+                localStorage.clear();
+                showResult('localStorage cleared');
+            } catch (e) {
+                showResult(`Error clearing localStorage: ${e.message}`);
+            }
+        });
+
+        // 显示书签数据
+        document.getElementById('showBookmarks').addEventListener('click', () => {
+            try {
+                const bookmarkTree = localStorage.getItem('bookmarkTree');
+                if (bookmarkTree) {
+                    const bookmarks = JSON.parse(bookmarkTree);
+                    showResult(`Bookmarks in localStorage: ${JSON.stringify(bookmarks, null, 2)}`);
+                } else {
+                    showResult('No bookmarks found in localStorage');
+                }
+            } catch (e) {
+                showResult(`Error reading bookmarks from localStorage: ${e.message}`);
+            }
+        });
+    </script>
+</body>
+</html>

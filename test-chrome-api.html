@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Bookmark Cat - Chrome API Test</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/index.css"/>
+    <style>
+        .test-section {
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+        .test-button {
+            margin: 10px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .test-button:hover {
+            background-color: #45a049;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-section">
+        <h1>Bookmark Cat - Chrome API Test</h1>
+        <p>This page tests Chrome bookmarks API functionality.</p>
+        
+        <button id="testGetBookmarks" class="test-button">Test Get Bookmarks</button>
+        <button id="testCreateBookmark" class="test-button">Test Create Bookmark</button>
+        <button id="testUpdateBookmark" class="test-button">Test Update Bookmark</button>
+        <button id="testDeleteBookmark" class="test-button">Test Delete Bookmark</button>
+        
+        <div id="result"></div>
+    </div>
+
+    <script>
+        // 显示结果
+        function showResult(message) {
+            document.getElementById('result').innerHTML = message;
+        }
+
+        // 测试获取书签
+        document.getElementById('testGetBookmarks').addEventListener('click', () => {
+            if (chrome?.bookmarks?.getTree) {
+                chrome.bookmarks.getTree((bookmarkTreeNodes) => {
+                    if (chrome.runtime.lastError) {
+                        showResult('Error: ' + chrome.runtime.lastError.message);
+                    } else {
+                        showResult('Successfully retrieved bookmarks. Total nodes: ' + bookmarkTreeNodes.length);
+                        console.log(bookmarkTreeNodes);
+                    }
+                });
+            } else {
+                showResult('Chrome bookmarks API not available');
+            }
+        });
+
+        // 测试创建书签
+        document.getElementById('testCreateBookmark').addEventListener('click', () => {
+            if (chrome?.bookmarks?.create) {
+                chrome.bookmarks.create({
+                    title: 'Test Bookmark',
+                    url: 'https://www.example.com'
+                }, (newBookmark) => {
+                    if (chrome.runtime.lastError) {
+                        showResult('Error: ' + chrome.runtime.lastError.message);
+                    } else {
+                        showResult('Successfully created bookmark with ID: ' + newBookmark.id);
+                        console.log(newBookmark);
+                    }
+                });
+            } else {
+                showResult('Chrome bookmarks API not available');
+            }
+        });
+
+        // 测试更新书签
+        document.getElementById('testUpdateBookmark').addEventListener('click', () => {
+            // 首先获取一个书签ID来测试更新
+            if (chrome?.bookmarks?.getTree) {
+                chrome.bookmarks.getTree((bookmarkTreeNodes) => {
+                    if (chrome.runtime.lastError) {
+                        showResult('Error getting bookmarks: ' + chrome.runtime.lastError.message);
+                    } else {
+                        // 查找一个URL书签来更新
+                        let bookmarkToUpdate = null;
+                        function findUrlBookmark(nodes) {
+                            for (let node of nodes) {
+                                if (node.url) {
+                                    bookmarkToUpdate = node;
+                                    return;
+                                }
+                                if (node.children) {
+                                    findUrlBookmark(node.children);
+                                }
+                            }
+                        }
+                        findUrlBookmark(bookmarkTreeNodes);
+                        
+                        if (bookmarkToUpdate) {
+                            chrome.bookmarks.update(bookmarkToUpdate.id, {
+                                title: 'Updated Test Bookmark',
+                                url: 'https://www.updated-example.com'
+                            }, (updatedBookmark) => {
+                                if (chrome.runtime.lastError) {
+                                    showResult('Error updating bookmark: ' + chrome.runtime.lastError.message);
+                                } else {
+                                    showResult('Successfully updated bookmark with ID: ' + updatedBookmark.id);
+                                    console.log(updatedBookmark);
+                                }
+                            });
+                        } else {
+                            showResult('No URL bookmarks found to update');
+                        }
+                    }
+                });
+            } else {
+                showResult('Chrome bookmarks API not available');
+            }
+        });
+
+        // 测试删除书签
+        document.getElementById('testDeleteBookmark').addEventListener('click', () => {
+            // 首先获取一个书签ID来测试删除
+            if (chrome?.bookmarks?.getTree) {
+                chrome.bookmarks.getTree((bookmarkTreeNodes) => {
+                    if (chrome.runtime.lastError) {
+                        showResult('Error getting bookmarks: ' + chrome.runtime.lastError.message);
+                    } else {
+                        // 查找一个URL书签来删除
+                        let bookmarkToDelete = null;
+                        function findUrlBookmark(nodes) {
+                            for (let node of nodes) {
+                                if (node.url) {
+                                    bookmarkToDelete = node;
+                                    return;
+                                }
+                                if (node.children) {
+                                    findUrlBookmark(node.children);
+                                }
+                            }
+                        }
+                        findUrlBookmark(bookmarkTreeNodes);
+                        
+                        if (bookmarkToDelete) {
+                            chrome.bookmarks.remove(bookmarkToDelete.id, () => {
+                                if (chrome.runtime.lastError) {
+                                    showResult('Error deleting bookmark: ' + chrome.runtime.lastError.message);
+                                } else {
+                                    showResult('Successfully deleted bookmark with ID: ' + bookmarkToDelete.id);
+                                }
+                            });
+                        } else {
+                            showResult('No URL bookmarks found to delete');
+                        }
+                    }
+                });
+            } else {
+                showResult('Chrome bookmarks API not available');
+            }
+        });
+    </script>
+</body>
+</html>

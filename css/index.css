@@ -1,4 +1,3 @@
-
 .link img {
     width: 16px;
     height: 16px;
@@ -9,9 +8,57 @@
 .link {
     list-style-type: none;
     margin: 5px 0;
+    position: relative;
 }
 
+/* 书签操作按钮容器 */
+.bookmark-actions {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    display: flex;
+    gap: 5px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
 
+/* 鼠标悬停时显示按钮 */
+.link:hover .bookmark-actions {
+    opacity: 1;
+}
+
+/* 操作按钮样式 */
+.action-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: none;
+    background-color: #f0f0f0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+}
+
+.action-btn.edit-btn {
+    background-color: #2196F3;
+    color: white;
+}
+
+.action-btn.delete-btn {
+    background-color: #F44336;
+    color: white;
+}
+
+/* 模态框样式 */
 .modal {
     display: none;
     position: fixed;
@@ -79,18 +126,21 @@ form button {
 form button:hover {
     background-color: #45a049;
 }
+
 .motioned{
     position: fixed;
     top: 36px;
     right: 68px;
     display: flex;
 }
+
 .motioned .login, .motioned .register, .motioned .logout, .motioned .userName{
     color: #0056b3;
     font-size: 14px;
     padding: 0 10px;
     cursor: pointer;
 }
+
 /* 导出按钮样式 */
 .newbt_small {
     display: inline-block;
@@ -141,5 +191,18 @@ form button:hover {
 
     form button:hover {
         background-color: #0056b3;
+    }
+    
+    .action-btn {
+        background-color: #555;
+        color: white;
+    }
+    
+    .action-btn.edit-btn {
+        background-color: #2196F3;
+    }
+    
+    .action-btn.delete-btn {
+        background-color: #F44336;
     }
 }
