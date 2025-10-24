@@ -102,27 +102,8 @@ function exportHtml() {
         doc.getElementById('bookmarkMenu').innerHTML = sidebarHtml;
         doc.getElementById('bookmarkContent').innerHTML = contentHtml;
 
-        const shareLink = doc.getElementById('shareLink');
-        if (shareLink) {
-          shareLink.remove();
-        }
-
         const scriptsToRemove = doc.querySelectorAll('script:not([src^="https://"])');
         scriptsToRemove.forEach(script => script.remove());
-
-        const cssUrls = [
-          'https://web.3702740.xyz/css/index.css',
-          'https://web.3702740.xyz/css/style.css'
-        ];
-
-        cssUrls.forEach(url => {
-          if (!doc.querySelector(`link[href="${url}"]`)) {
-            const link = doc.createElement('link');
-            link.rel = 'stylesheet';
-            link.href = url;
-            doc.head.appendChild(link);
-          }
-        });
 
         const updatedHtml = doc.documentElement.outerHTML;
         const blob = new Blob([updatedHtml], {type: 'text/html'});
